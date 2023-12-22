@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | FAQ accordion</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    @font-face {
+      font-family: 'WBold'; /* Назва шрифта для використання в CSS */
+      src: url('/assets/fonts/static/WorkSans-Bold.ttf') format('truetype'); /* Шлях до TTF-шрифту */
+      font-weight: 800; /* Вага шрифта */
+      font-style: normal; /* Стиль шрифта (normal, italic, oblique) */
+    }
+    @font-face {
+      font-family: 'WRegular'; /* Назва шрифта для використання в CSS */
+      src: url('/assets/fonts/static/WorkSans-Regular.ttf') format('truetype'); /* Шлях до TTF-шрифту */
+      font-weight: 400; /* Вага шрифта */
+      font-style: normal; /* Стиль шрифта (normal, italic, oblique) */
+    }
+    @font-face {
+      font-family: 'Wsemi'; /* Назва шрифта для використання в CSS */
+      src: url('/assets/fonts/static/WorkSans-SemiBold.ttf') format('truetype'); /* Шлях до TTF-шрифту */
+      font-weight: 400; /* Вага шрифта */
+      font-style: normal; /* Стиль шрифта (normal, italic, oblique) */
+    }
+    body {
+      font-family: 'WRegular';
+      background-color: rgb(253, 237, 251);
+    }
+    h1 {
+      margin: 0 0 25px 0;
+    }
+    .main {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: url('/assets/images/background-pattern-desktop.svg') 0 0 / 100% no-repeat;
+      padding-top: clamp(30px, 7vw, 60px);
+      padding-bottom: clamp(30px, 7vw, 60px);
+    }
+    .main__container {
+      display: flex;
+      justify-content:center;
+      align-items: center;
+      max-width: 1200px; /* Встановлюємо максимальну ширину контейнера для зручності читання тексту на широких екранах */
+      margin: 0 auto;
+    }
+    .main__content {
+      display: flex;
+      flex-direction: column;
+      max-width: 599px;
+      height: 100%;
+      border-radius: 25px;
+      background-color: #fff;
+      padding: 34px;
+    }
+    .content {
+      margin: 0 25px;
+      text-align: left; /* Вирівнюємо текст по лівому краю */
+    }
+    
+    .content__header {
+      font-family: 'WBold';
+      font-size: clamp(25px, 7vw, 55px);
+      display: flex;
+      align-items: center;
+    }
+    .content__header svg, .content__header img {
+      margin-right: 15px;
+    }
+
+    .spoiler:not(:last-child) {
+      margin-bottom: 45px;
+    }
+    
+    .spoiler-header {
+      display: flex;
+      align-items: center;
+    }
+  
+    .spoiler-btn {
+      width: 100%;
+      display: flex;
+      font-size: clamp(12px, 4vw, 20px);
+      align-items: center;
+      text-align: left;
+      justify-content: space-between;
+      font-family: 'Wsemi';
+      cursor: pointer;
+      background-color: #fff;
+      border: 0;
+      padding: 0;
+    }
+    .spoiler-btn:hover {
+      color: #9e0ac0;
+    }
+
+    span {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: clamp(25px, 6vw, 30px);
+      height: clamp(25px, 6vw, 30px);
+      margin-left: 15px;
+      border-radius: 50%;
+      background-color: #9e0ac0;
+      transition: all 0.8s ease 0s;
+    }
+     span.open {
+      transition: all 0.8s ease 0s;
+      background-color: #000;
+      transform: rotate(-180deg);
+    }
+
+    span::after {
+      content: '';
+      position: absolute;
+      display: block;
+      width: clamp(10px, 3vw, 13px);
+      height: 3px;
+      background-color: #fff;
+      border-radius: 5px;
+      transform: rotate(90deg);
+    }
+    span.open::after {
+      transition: all 0.3s ease 0s;
+      transform: rotate(-180deg);
+    }
+    span::before {
+      content: '';
+      position: absolute;
+      display: block;
+      width: clamp(10px, 3vw, 13px);
+      height: 3px;
+      background-color: #fff;
+      border-radius: 5px;
+    }
+    .spoiler-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out;
+    }
+
+    .spoiler-content.show {
+      transition: max-height 0.5s ease-in-out;
+      max-height: 200px; /* Встановіть бажану висоту або auto */
+    }
+
+    /* Встановлення анімації для тексту */
+    .animated-text {
+      opacity: 0;
+      font-family: 'WRegular';
+      font-size: clamp(12px, 3vw, 16px);
+      color: #9c9c9c;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .spoiler-content.show .animated-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .animated-text {
+      width: 100%;
+    }
+    
+    .attribution { font-family: 'WRegular'; font-size: 11px; text-align: center;  color: #9c9c9c;}
+    .attribution a { color: hsl(228, 45%, 44%); }
+  </style>
+</head>
+<body>
+  <section class="main">
+    <div class="main__container">
+      <div class="main__content content">
+        <h1 class="content__header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="clamp(20px, 7vw, 40px)" height="clamp(20px, 7vw, 40px)" fill="none" viewBox="0 0 40 41"><path fill="#AD28EB" d="M37.5 20.5a2.467 2.467 0 0 1-1.64 2.344l-9.913 3.604-3.603 9.911a2.5 2.5 0 0 1-4.688 0l-3.604-9.922-9.911-3.593a2.5 2.5 0 0 1 0-4.688l9.921-3.604 3.594-9.911a2.5 2.5 0 0 1 4.688 0l3.604 9.921 9.911 3.594A2.467 2.467 0 0 1 37.5 20.5Z"/></svg>
+          FAQs</h1>
+        <div class="spoiler">
+          <div class="spoiler-header">
+            <button class="spoiler-btn" data-target="element1">What is Frontend Mentor, and how will it help me?<span class="span" data-id="element1"></span></button>
+          </div>
+          <div  class="spoiler-content">
+            <p class="animated-text">Frontend Mentor offers realistic coding challenges to help developers improve their 
+              frontend coding skills with projects in HTML, CSS, and JavaScript. It's suitable for 
+              all levels and ideal for portfolio building.</p>
+          </div>
+        </div>
+        <div class="spoiler">
+          <div class="spoiler-header">
+            <button class="spoiler-btn" data-target="element2">Is Frontend Mentor free?<span class="span" data-id="element2"></span></button>
+          </div>
+          <div  class="spoiler-content">
+            <p class="animated-text">Yes, Frontend Mentor offers both free and premium coding challenges, with the free 
+              option providing access to a range of projects suitable for all skill levels.</p>
+          </div>
+        </div>
+        <div class="spoiler">
+          <div class="spoiler-header">
+            <button class="spoiler-btn" data-target="element3">Can I use Frontend Mentor projects in my portfolio?<span class="span" data-id="element3"></span></button>
+          </div>
+          <div  class="spoiler-content">
+            <p class="animated-text">Yes, you can use projects completed on Frontend Mentor in your portfolio. It's an excellent
+              way to showcase your skills to potential employers!</p>
+          </div>
+        </div>
+        <div class="spoiler">
+          <div class="spoiler-header">
+            <button class="spoiler-btn" data-target="element4">How can I get help if I'm stuck on challenge?<span class="span" data-id="element4"></span></button>
+          </div>
+          <div  class="spoiler-content">
+            <p class="animated-text">The best place to get help is inside Frontend Mentor's Discord community. There's a help 
+              channel where you can ask questions and seek support from other community members.</p>
+          </div>
+        </div>
+        <div class="attribution">
+          Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+          Coded by <a href="#">Nazarii</a>.
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var spoilerBtns = document.querySelectorAll('.spoiler-btn');
+
+      spoilerBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var spoilerContent = this.parentElement.nextElementSibling;
+
+          // Зміна класу для виклику анімації
+          spoilerContent.classList.toggle('show');
+        });
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var clickBtns = document.querySelectorAll(".spoiler-btn");
+
+      clickBtns.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var targetId = this.getAttribute('data-target');
+          var targetElement = document.querySelectorAll('.span[data-id="' + targetId +'"]');
+
+         targetElement.forEach(function(element){
+          element.classList.toggle('open');
+         })
+      })
+      })
+    });
+  </script>
+</body>
+</html>
